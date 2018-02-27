@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>TWAIN Cloud Scanner Registration</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="register.css" rel="stylesheet">
+</head>
+<body class="text-center">
+
+<div class="container">
+
+    <img class="mb-4" src="../images/logo.png" alt="" width="200">
+    <h1>TWAIN Cloud Scanner Registration</h1>
+
+    <form id="authorizeForm" class="form-signin">
+        <fieldset class="form-group">
+            <p>You are about to claim an ownership for a scanner.
+                Enter the registration token provided by the scanner and
+                confirm your identity to continue.</p>
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="registrationToken" class="sr-only">Registration Token</label>
+            <input id="registrationToken" type="text" class="form-control" placeholder="Registration Token" required autofocus>
+        </fieldset>
+
+        <fieldset class="form-group">
+        <div class="fb-login-button" data-max-rows="1" data-size="large"
+             data-button-type="continue_with" data-show-faces="false"
+             data-auto-logout-link="false" data-use-continue-as="true" onlogin="authorizeClaim()"></div>
+        </fieldset>
+    </form>
+<!--
+    <form id="claimForm" class="form-signin" style="display:none">
+        <fieldset class="form-group">
+            <p>Enter the registration token provided by your scanner:</p>
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="registrationToken" class="sr-only">Registration Token</label>
+            <input id="registrationToken" type="text" class="form-control" placeholder="Registration Token" required autofocus>
+        </fieldset>
+
+        <fieldset class="form-group">
+            <input id="claimButton" type="button" class="btn btn-primary" value="Claim Scanner"/>
+        </fieldset>
+    </form>
+-->
+    <form id="congratsForm" class="form-signin" style="display:none">
+        <h3 id="scannerName"></h3>
+        <fieldset class="form-group">
+            <p>Successfully Registered with TWAIN Cloud.</p>
+        </fieldset>
+    </form>
+
+    <p class="mt-5 mb-3 text-muted">&copy; <a href="http://www.twain.org/">TWAIN Working Group</a> and <a href="https://hazybits.com">HazyBits</a>, 2018</p>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+<script src="../app/common.js"></script>
+<script src="../app/twain.js"></script>
+<script src="register.js"></script>
+
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '1392707264191692',
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v2.12'
+        });
+
+        FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+
+</body>
+</html>

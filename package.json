@@ -1,0 +1,17 @@
+{
+  "name": "twain-cloud-web",
+  "version": "1.0.0",
+  "description": "TWAIN Cloud Web Application",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "twain",
+    "cloud"
+  ],
+  "author": "TWAIN Working Group",
+  "license": "MIT"
+}
