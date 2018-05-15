@@ -1,7 +1,4 @@
 sudo: false
-language: ruby
-rvm:
-- 2.4.0
 deploy:
   provider: s3
   access_key_id: $AWS_ACCESS_KEY_ID
