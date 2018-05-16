@@ -1,6 +1,6 @@
 'use strict';
 
-var apiEndpoint = '<insert your twain cloud api root endpoint here>';
+var apiEndpoint = 'https://api-twain.hazybits.com/dev';
 
 function log(message) {
   console.log(message);
