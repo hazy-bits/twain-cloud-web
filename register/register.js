@@ -2,13 +2,13 @@ var twain = new TwainCloud({ apiEndpoint: apiEndpoint });
 var autoRefresh = true;
 
 function authorizeClaim(provider) {
-  var query = getQueryParams(document.location.search);
+  var query = getQueryParams(document.location.search) || {};
 
   if (isAuthorized()) {
     var scannerId = query.scannerId;
     claimScanner(scannerId);
   } else {
-    query += '&confirmed=true';
+    query.confirmed = true;
     login(provider, 'register/', query );
   }
 }
