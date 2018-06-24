@@ -104,6 +104,8 @@ function processQueryAuth(callback, errorCallback) {
       saveAuthTokens(aToken, rToken);
       window.history.replaceState({authorization_token: ''}, '');
       success = true;
+    } else {
+      clearAuthTokens();
     }
   }
 
