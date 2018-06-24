@@ -21,3 +21,17 @@ body {
 .navbar-brand {
     margin-left: 16px;
 }
+
+.loginButton {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.profile-content {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.hidden {
+  display:none;
+}

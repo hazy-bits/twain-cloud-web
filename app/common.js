@@ -53,10 +53,10 @@ function saveAuthTokens(authorization_token, refresh_token) {
   log('refresh_token:' + getRefreshToken());
 }
 
-function login(origin, query) {
+function login(provider, origin, query) {
   log('Login...');
 
-  var signinUrl = apiEndpoint + '/authentication/signin/facebook';
+  var signinUrl = apiEndpoint + '/authentication/signin/' + provider;
   if (origin) {
     signinUrl += '?origin=' + origin + '&query=' + encodeURIComponent($.param(query));
   }
@@ -90,7 +90,8 @@ function refreshToken(callback) {
     });
 }
 
-function processQueryAuth(callback) {
+function processQueryAuth(callback, errorCallback) {
+  var success = false;
   var query = getQueryParams(document.location.search);
   if (query.error){
     log(query.error);
@@ -100,12 +101,15 @@ function processQueryAuth(callback) {
     var rToken = query.refresh_token || '';
 
     if (aToken && rToken) {
-        saveAuthTokens(aToken, rToken);
-        window.history.replaceState({authorization_token: ''}, '');
+      saveAuthTokens(aToken, rToken);
+      window.history.replaceState({authorization_token: ''}, '');
+      success = true;
+    }
+  }
 
-        if (callback) {
-            callback();
-          }
-      }
+  if (success && callback) {
+    callback();
+  } else if (errorCallback) {
+    errorCallback();
   }
 }

@@ -8,6 +8,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <!-- Social buttons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.min.css" integrity="sha256-rFMLRbqAytD9ic/37Rnzr2Ycy/RlpxE5QH52h7VoIZo=" crossorigin="anonymous" />
     <!-- Custom styles for this template -->
     <link href="register.css" rel="stylesheet">
 </head>
@@ -21,8 +24,7 @@
     <form id="authorizeForm" class="form-signin">
         <fieldset class="form-group">
             <p>You are about to claim an ownership for a scanner.
-                Enter the registration token provided by the scanner and
-                confirm your identity to continue.</p>
+                Enter the registration token provided by the scanner:</p>
         </fieldset>
 
         <fieldset class="form-group">
@@ -31,27 +33,16 @@
         </fieldset>
 
         <fieldset class="form-group">
-        <div class="fb-login-button" data-max-rows="1" data-size="large"
-             data-button-type="continue_with" data-show-faces="false"
-             data-auto-logout-link="false" data-use-continue-as="true" onlogin="authorizeClaim()"></div>
+          <p>Confirm your identity using one of the buttons below:</p>
+          <div class="loginButton">
+              <a id="googleLogin" href="#" class="btn btn-block btn-social btn-google"><i class="fa fa-google"></i>Sign in with Google</a>
+          </div>
+          <div class="loginButton">
+            <a id="facebookLogin" href="#" class="btn btn-block btn-social btn-facebook"><i class="fa fa-facebook"></i>Sign in with Facebook</a>
+          </div>
         </fieldset>
     </form>
-<!--
-    <form id="claimForm" class="form-signin" style="display:none">
-        <fieldset class="form-group">
-            <p>Enter the registration token provided by your scanner:</p>
-        </fieldset>
 
-        <fieldset class="form-group">
-            <label for="registrationToken" class="sr-only">Registration Token</label>
-            <input id="registrationToken" type="text" class="form-control" placeholder="Registration Token" required autofocus>
-        </fieldset>
-
-        <fieldset class="form-group">
-            <input id="claimButton" type="button" class="btn btn-primary" value="Claim Scanner"/>
-        </fieldset>
-    </form>
--->
     <form id="congratsForm" class="form-signin" style="display:none">
         <h3 id="scannerName"></h3>
         <fieldset class="form-group">
@@ -68,27 +59,6 @@
 <script src="../app/common.js"></script>
 <script src="../app/twain.js"></script>
 <script src="register.js"></script>
-
-<script>
-    window.fbAsyncInit = function() {
-        FB.init({
-            appId      : '1392707264191692',
-            cookie     : true,
-            xfbml      : true,
-            version    : 'v2.12'
-        });
-
-        FB.AppEvents.logPageView();
-    };
-
-    (function(d, s, id){
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-</script>
 
 </body>
 </html>

@@ -1,7 +1,7 @@
 var twain = new TwainCloud({ apiEndpoint: apiEndpoint });
 var autoRefresh = true;
 
-function authorizeClaim() {
+function authorizeClaim(provider) {
   var query = getQueryParams(document.location.search);
 
   if (isAuthorized()) {
@@ -9,7 +9,7 @@ function authorizeClaim() {
     claimScanner(scannerId);
   } else {
     query += '&confirmed=true';
-    login('register/', query );
+    login(provider, 'register/', query );
   }
 }
 
@@ -38,6 +38,13 @@ function claimScanner(scannerId) {
 }
 
 $(function () {
+  $('#facebookLogin').on('click', function(event) {
+    authorizeClaim('facebook');
+  });
+  $('#googleLogin').on('click', function(event) {
+    authorizeClaim('google');
+  });
+
   processQueryAuth();
   var query = getQueryParams(document.location.search);
 
@@ -47,18 +54,4 @@ $(function () {
     var scannerId = query.scannerId || '';
     claimScanner(scannerId);
   }
-
-    /*
-    if (isAuthorized()) {
-        $('#claimForm').show();
-    } else {
-        $('#authorizeForm').show();
-    }
-
-
-    $('#claimButton').on('click', function() {
-        var scannerId = query.scannerId || '';
-        claimScanner(scannerId);
-    });
-    */
 });

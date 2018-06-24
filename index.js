@@ -76,10 +76,23 @@ function deleteScanner() {
   }
 }
 
+function initializeAuthorizedPage() {
+  $('#authorizedProfileItems').show();
+  loadScanners();
+}
+
+function initializeUnauthorizedPage() {
+  $('#unauthorizedProfileItems').show();
+}
+
 $(function () {
-  $('#login').on('click', function(event) {
-    login();
+  $('#facebookLogin').on('click', function(event) {
+    login('facebook');
   });
+  $('#googleLogin').on('click', function(event) {
+    login('google');
+  });
+
   $('#logout').on('click', function(event) {
     logout();
   });
@@ -88,5 +101,5 @@ $(function () {
   $('#startSession').on('click', startSession);
   $('#deleteScanner').on('click', deleteScanner);
 
-  processQueryAuth(loadScanners);
+  processQueryAuth(initializeAuthorizedPage, initializeUnauthorizedPage);
 });
