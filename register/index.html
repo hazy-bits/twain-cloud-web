@@ -16,7 +16,7 @@
 </head>
 <body class="vertical-center">
 
-<div class="container">
+<div class="container" style="display:none">
 
     <div class="text-center">
       <img class="mb-4" src="../images/logo.png" alt="" width="200">
@@ -25,13 +25,10 @@
       <h2>Scanner Registration</h2>
     </div>
 
-    <form id="authorizeForm" class="form-signin">
+    <form id="authorizeForm" class="form-signin" style="display:none">
         <fieldset class="form-group">
             <p>You are about to claim an ownership for a scanner.
                 Enter the registration token provided by the scanner:</p>
-        </fieldset>
-
-        <fieldset class="form-group">
             <label for="registrationToken" class="sr-only">Registration Token</label>
             <input id="registrationToken" type="text" class="form-control" placeholder="Registration Token" required autofocus>
         </fieldset>
@@ -47,7 +44,7 @@
         </fieldset>
     </form>
 
-    <form id="congratsForm" class="form-signin" style="display:none">
+    <form id="congratsForm" class="form-signin text-center" style="display:none">
         <h3 id="scannerName"></h3>
         <fieldset class="form-group">
             <p>Successfully Registered with TWAIN Cloud.</p>

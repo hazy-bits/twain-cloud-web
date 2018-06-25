@@ -30,6 +30,27 @@ function claimScanner(scannerId, registrationToken) {
     });
 }
 
+function showPageSection(selector)
+{
+  $(selector).show();
+  $('.container').show();
+}
+
+function initializeAuthorizedPage() {
+  showPageSection('#congratsForm');
+  var query = getQueryParams(document.location.search);
+  var scannerId = query.scannerId || '';
+  var registrationToken = query.registrationToken || '';
+
+  if (scannerId && registrationToken) {
+    claimScanner(scannerId, registrationToken);
+  }
+}
+
+function initializeUnauthorizedPage() {
+  showPageSection('#authorizeForm');
+}
+
 $(function () {
   $('#facebookLogin').on('click', function(event) {
     authorizeClaim('facebook');
@@ -38,12 +59,5 @@ $(function () {
     authorizeClaim('google');
   });
 
-  processQueryAuth();
-  var query = getQueryParams(document.location.search);
-  var scannerId = query.scannerId || '';
-  var registrationToken = query.registrationToken || '';
-
-  if (scannerId && registrationToken) {
-    claimScanner(scannerId, registrationToken);
-  }
+  processQueryAuth(initializeAuthorizedPage, initializeUnauthorizedPage);
 });
