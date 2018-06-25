@@ -18,7 +18,7 @@ function claimScanner(scannerId, registrationToken) {
         $('#scannerName').text(data.name);
       }
 
-      $('#authorizeForm').hide();
+      $('#processingForm').hide();
       $('#congratsForm').show();
     })
     .catch(function (error) {
@@ -37,7 +37,7 @@ function showPageSection(selector)
 }
 
 function initializeAuthorizedPage() {
-  showPageSection('#congratsForm');
+  showPageSection('#processingForm');
   var query = getQueryParams(document.location.search);
   var scannerId = query.scannerId || '';
   var registrationToken = query.registrationToken || '';
