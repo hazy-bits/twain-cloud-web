@@ -1,26 +1,21 @@
-html,
-body {
-    height: 100%;
-}
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
 
-body {
-    display: -ms-flexbox;
-    display: -webkit-box;
-    display: flex;
-    -ms-flex-align: center;
-    -ms-flex-pack: center;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    background-color: #f5f5f5;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+
+  align-items: center;
+  background-color: #f5f5f5;
+
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .form-signin {
     width: 100%;
-    max-width: 330px;
+    max-width: 400px;
     padding: 15px;
     margin: 0 auto;
 }

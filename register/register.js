@@ -3,19 +3,12 @@ var autoRefresh = true;
 
 function authorizeClaim(provider) {
   var query = getQueryParams(document.location.search) || {};
-
-  if (isAuthorized()) {
-    var scannerId = query.scannerId;
-    claimScanner(scannerId);
-  } else {
-    query.confirmed = true;
-    login(provider, 'register/', query );
-  }
+  query.registrationToken = $('#registrationToken').val();
+  login(provider, 'register/', query);
 }
 
-function claimScanner(scannerId) {
-  var authorizationToken = getAuthToken();
-  var registrationToken = $('#registrationToken').val();
+function claimScanner(scannerId, registrationToken) {
+  var authorizationToken = getAuthToken(); 
 
   twain.claim(authorizationToken, scannerId, registrationToken)
     .then(function (data) {
@@ -47,11 +40,10 @@ $(function () {
 
   processQueryAuth();
   var query = getQueryParams(document.location.search);
+  var scannerId = query.scannerId || '';
+  var registrationToken = query.registrationToken || '';
 
-  var confirmed = query.confirmed || '';
-
-  if (confirmed) {
-    var scannerId = query.scannerId || '';
-    claimScanner(scannerId);
+  if (scannerId && registrationToken) {
+    claimScanner(scannerId, registrationToken);
   }
 });
