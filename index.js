@@ -11,9 +11,9 @@ function getSelectedScannerId() {
 }
 
 function loadScanners() {
-  var authorizationToken = localStorage.getItem('authorization_token');
+  var authorizationToken = getAuthToken();
 
-  twain.getScanners(authorizationToken)
+  return twain.getScanners(authorizationToken)
         .then(function (data) {
             // cache scanners
           scanners = data;
@@ -21,12 +21,10 @@ function loadScanners() {
             // fill scanners table
           var rows = '';
           data.forEach(function(scanner) {
-            rows +=
-                    '<tr id="' + scanner.id + '">' +
+            rows += '<tr id="' + scanner.id + '">' +                    
                     '<td>' + scanner.name + '</td>' +
-                    '<td>' + scanner.manufacturer + '</td>' +
-                    '<td>' + scanner.model + '</td>' +
-                    '<td>' + scanner.connection_state + '</td>' +
+                    '<td>' + scanner.description + '</td>' +
+                    '<td>' + scanner.id + '</td>' +
                     '</tr>';
           });
           $('#scannersTable tbody').html(rows);
@@ -36,7 +34,10 @@ function loadScanners() {
             $('#scannersTable > tbody > tr').removeClass('table-success');
             $(event.currentTarget).addClass('table-success');
           });
+
+          return scanners;
         })
+        .then(connectEvents)
         .catch(function (error) {
           if(autoRefresh) {
             refreshToken(loadScanners);
@@ -46,30 +47,32 @@ function loadScanners() {
         });
 }
 
-function startSession() {
-  var scannerId = getSelectedScannerId();
-  var authorizationToken = localStorage.getItem('authorization_token');
+function connectEvents(scanners) {
+  twain.on('message', function(event) {
+    var message = JSON.parse(event.body);
+    var messageType = (message.results) ? '[Response]' : '[Request]';
 
-  if (scannerId) {
-    twain.startSession(authorizationToken, scannerId)
-      .then(function(session) {
-        twain.on('message', log);
-        twain.on('error', log);
-      })
-      .catch(function(error) {
-        if(autoRefresh) {
-          refreshToken(startSession);
-        } else {
-          log('Unauthorized: ' + JSON.stringify(error));
-        }
-      });
-  }
+    console.log(message.commandId + ' ' + messageType + ' ' + message.method, message);    
+  });
+  twain.on('error', log);
 
+  var authorizationToken = getAuthToken();
+  twain.connectEvents(authorizationToken, scanners.map(function (s) { return s.id }))
+    .then(function() {
+      log('Connected to TWAIN Cloud events hub.');
+    })
+    .catch(function(error) {
+      if(autoRefresh) {
+        refreshToken(connectEvents);
+      } else {
+        log('Unauthorized: ' + JSON.stringify(error));
+      }
+    });
 }
 
 function deleteScanner() {
   var scannerId = getSelectedScannerId();
-  var authorizationToken = localStorage.getItem('authorization_token');
+  var authorizationToken = getAuthToken();
 
   if (scannerId) {
     twain.deleteScanner(authorizationToken, scannerId).then(loadScanners);
@@ -98,7 +101,6 @@ $(function () {
   });
 
   $('#refreshScanners').on('click', loadScanners);
-  $('#startSession').on('click', startSession);
   $('#deleteScanner').on('click', deleteScanner);
 
   processQueryAuth(initializeAuthorizedPage, initializeUnauthorizedPage);

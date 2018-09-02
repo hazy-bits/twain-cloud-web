@@ -58,45 +58,66 @@
     </nav>
 
     <div class="row">
-        <div class="col-3">
-            <nav class="nav flex-column">
-                <a class="nav-link active" href="#">Scanners</a>
-            </nav>
-        </div>
-        <div class="col">
-            <div class="container">
-                <div class="row">
-                    <nav class="navbar">
-                        <form class="form-inline my-2 my-lg-0">
-                            <button id="refreshScanners" type="button" class="btn btn-outline-primary mr-sm-2">Refresh</button>
-                            <button id="startSession" type="button" class="btn btn-outline-success mr-sm-2">Start Session</button>
-                            <button id="deleteScanner" type="button" class="btn btn-outline-danger mr-sm-2">Delete</button>
-                        </form>
-                    </nav>
-                </div>
-                <div class="row">
-                    <table id="scannersTable" class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Manufacturer</th>
-                            <th>Model</th>
-                            <th>Connection</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active show" data-toggle="tab" href="#scannersTab">Scanners</a>
+                    </li>
+                    <!--
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#sessionsTab">Sessions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#logsTab">Logs</a>
+                    </li>
+                    -->
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active show" id="scannersTab">
+                        <div class="row">
+                            <div class="col">
+                                <div class="container">
+                                    <div class="row">
+                                        <nav class="navbar">
+                                            <form class="form-inline my-2 my-lg-0">
+                                                <button id="refreshScanners" type="button" class="btn btn-outline-primary mr-sm-2">Refresh</button>
+                                                <button id="deleteScanner" type="button" class="btn btn-outline-danger mr-sm-2">Delete</button>
+                                            </form>
+                                        </nav>
+                                    </div>
+                                    <div class="row">
+                                        <table id="scannersTable" class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>ID</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="token" class="response"></div>
+                        </div>
+                        <div class="row">
+                            <div id="test-result" class="response"></div>
+                        </div>
+                    </div>
+                    <!--
+                    <div role="tabpanel" class="tab-pane fade in" id="sessionsTab">
+                    </div>
+      
+                    <div role="tabpanel" class="tab-pane fade in" id="logsTab">
+                    </div>
+                    -->
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div id="token" class="response"></div>
-    </div>
-    <div class="row">
-        <div id="test-result" class="response"></div>
-    </div>
 </div>
 
 <footer class="footer">

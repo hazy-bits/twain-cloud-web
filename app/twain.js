@@ -10,12 +10,19 @@ function TwainCloud(config) {
   var eventHub = null;
 
   function sendRequest(verb, url, token, data) {
+    var endpoint = verb  + ' ' + url;
+    (data) ? console.log('[Request] ' + endpoint, data) : console.log('[Request] ' + endpoint);
+       
     return $.ajax({
       method: verb,
       url: url,
       headers: { Authorization: token },
       data: data
-    }).promise();
+    }).promise()
+    .then(function(data) {
+      console.log('[Response] ' + endpoint, data);
+      return data;
+    });
   }
 
   function getScannerById(id) {
@@ -34,7 +41,7 @@ function TwainCloud(config) {
 
   function createEventHandler(twain, event) {
     return function(topic, message) {
-      log('[MQTT] Topic: ' + topic + ', Message: ' + message);
+      //log('[MQTT] Topic: ' + topic + ', Message: ' + message);
       var handler = twain.handlers[event];
       if (handler) {
         handler(JSON.parse(message));
@@ -46,8 +53,6 @@ function TwainCloud(config) {
     var deferred = $.Deferred();
 
     if (token) {
-      log('Loading...');
-
       var claimEndpoint = this.config.apiEndpoint + '/claim';
       sendRequest('POST', claimEndpoint, token, {
         scannerId: scannerId,
@@ -73,12 +78,9 @@ function TwainCloud(config) {
     var deferred = $.Deferred();
 
     if (token) {
-      log('Loading...');
-
       sendRequest('GET', this.config.apiEndpoint + '/scanners', token)
             .then(function (data) {
-              log(data);
-                // cache scanners
+              // cache scanners
               scanners = data;
               deferred.resolve(data);
             })
@@ -94,45 +96,40 @@ function TwainCloud(config) {
     return deferred.promise();
   };
 
-  TwainCloud.prototype.startSession = function startSession(token, scannerId) {
+  TwainCloud.prototype.connectEvents = function connectEvents(token, scannerIds) {
     var deferred = $.Deferred();
     var twain = this;
 
-    var scanner = getScannerById(scannerId);
-    if (scanner) {
-            // TODO: fix endpoint retrieval
-      var sessionEndpoint = this.config.apiEndpoint + '/scanners/' + scanner.id + '/twaindirect/session';
-      sendRequest('POST', sessionEndpoint, token, {
-        'kind': 'twainlocalscanner',
-        'commandId': guid(),
-        'method': 'createSession'
+    var sessionEndpoint = this.config.apiEndpoint + '/user';
+    sendRequest('GET', sessionEndpoint, token)
+      .then(function (data) {
+        var brokerInfo = data.eventBroker;
+
+        // close previous mqtt client
+        if (eventHub) {
+          eventHub.end(true);
+          eventHub = null;
+        }
+
+        if (brokerInfo) {
+          // open a new one
+          var mqttUrl = brokerInfo.url;
+          eventHub = mqtt.connect(mqttUrl);
+          eventHub.on('message', createEventHandler(twain, 'message'));
+          eventHub.on('error', createEventHandler(twain, 'error'));
+          eventHub.subscribe(brokerInfo.topic);
+
+          for(var i = 0; i < scannerIds.length; ++i) {
+            eventHub.subscribe('twain/devices/' + scannerIds[i]);
+          }
+        }
+        
+        deferred.resolve(data);
       })
-            .then(function (data) {
-              log(data);
-
-                // store new session
-              session = data.results.session;
-
-                // close previous mqtt client
-              if (eventHub) {
-                eventHub.end(true);
-                eventHub = null;
-              }
-
-                // open a new one
-              var mqttUrl = session.eventSource.url;
-              eventHub = mqtt.connect(mqttUrl);
-              eventHub.on('message', createEventHandler(twain, 'message'));
-              eventHub.on('error', createEventHandler(twain, 'error'));
-              eventHub.subscribe(session.eventSource.topic);
-
-              deferred.resolve(data);
-            })
-            .catch(function (error) {
-              log('Unauthorized: ' + JSON.stringify(error));
-              deferred.reject(error);
-            });
-    }
+      .catch(function (error) {
+        log('Unauthorized: ' + JSON.stringify(error));
+        deferred.reject(error);
+      });
 
     return deferred.promise();
   };
@@ -146,7 +143,6 @@ function TwainCloud(config) {
       var deleteScannerEndpoint = this.config.apiEndpoint + '/scanners/' + scanner.id;
       sendRequest('DELETE', deleteScannerEndpoint, token)
         .then(function (data) {
-          log(data);
           deferred.resolve();
         })
         .catch(function (error) {

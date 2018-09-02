@@ -48,9 +48,6 @@ function saveAuthTokens(authorization_token, refresh_token) {
   if(refresh_token) {
     localStorage.setItem('refresh_token', refresh_token);
   }
-
-  log('authorization_token:'+ getAuthToken());
-  log('refresh_token:' + getRefreshToken());
 }
 
 function login(provider, origin, query) {
