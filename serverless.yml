@@ -1,0 +1,22 @@
+service: twain-cloud-website # NOTE: update this with your service name
+
+local: ${file(serverless.local.yml)} # local settings
+
+plugins:
+  - serverless-s3-sync
+  - serverless-plugin-scripts
+
+custom:
+  s3Sync:
+    - bucketName: ${cf:twain-cloud-${self:provider.stage}.WebSiteBucket}
+      localDir: dist
+
+  scripts:
+    hooks:
+      'deploy:createDeploymentArtifacts': npm run compile -- --apiUrl ${cf:twain-cloud-${self:provider.stage}.ServiceEndpoint}
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
