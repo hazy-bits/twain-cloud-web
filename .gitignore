@@ -1,3 +1,6 @@
+dist
+.serverless
+
 # Logs
 logs
 *.log
