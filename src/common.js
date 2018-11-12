@@ -1,6 +1,6 @@
 'use strict';
 
-var apiEndpoint = 'https://api-twain.hazybits.com/dev';
+var apiEndpoint = '{{apiUrl}}';
 
 function log(message) {
   console.log(message);

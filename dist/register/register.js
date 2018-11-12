@@ -3,7 +3,6 @@ var autoRefresh = true;
 
 function authorizeClaim(provider) {
   var query = getQueryParams(document.location.search) || {};
-  query.registrationToken = $('#registrationToken').val();
   login(provider, 'register/', query);
 }
 
